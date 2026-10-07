@@ -31,7 +31,7 @@ Ba hướng trong repository:
 | Hướng | Ý tưởng chính | Mục đích |
 |---|---|---|
 | **IMPORTANT L1** | Tính QKᵀ trước, sau đó dùng L1 importance của từng block | Xác định ngưỡng `T` và kiểm chứng khả năng pruning |
-| **NORM BASE** | Dùng `||Q_block||F × ||K_block||F` để dự đoán block quan trọng trước khi tính QKᵀ | Giảm chi phí ranking và tránh tính toàn bộ QKᵀ |
+| **NORM BASE** | Dùng ||Q_block||F × ||K_block||F để dự đoán block quan trọng trước khi tính QKᵀ | Giảm chi phí ranking và tránh tính toàn bộ QKᵀ |
 | **NORM BASE INT8** | Quantize Q/K về INT8 rồi dùng norm proxy để ranking | Đưa ý tưởng Norm Proxy gần hơn với triển khai phần cứng/edge |
 
 ---
