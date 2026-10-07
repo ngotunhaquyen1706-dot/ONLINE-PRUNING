@@ -38,13 +38,10 @@ B = [ 2  -4
 
 thì:
 
-\[
-I(B)=\frac{|2|+|-4|+|1|+|3|}{4}
-=\frac{2+4+1+3}{4}
-=2.5
-\]
+<img width="388" height="193" alt="image" src="https://github.com/user-attachments/assets/7b5fa508-37f9-4a9c-9606-9b8af1441606" />
 
-Sau khi tính importance cho toàn bộ candidate blocks:
+
+Sau khi tính importance cho toàn bộ candidate blocks => Xếp hạng => lấy top K block lớn nhất giữ lại, còn lại pruned hết:
 
 ```text
 QKᵀ
@@ -112,7 +109,7 @@ K=10(1-0.9)=1
 
 ## 4. Xác định threshold T
 
-Threshold được lấy từ **importance của block cuối cùng được giữ lại**:
+Threshold được lấy từ **importance L1 của block cuối cùng được giữ lại**:
 
 \[
 I(B)\ge T \Rightarrow KEEP
