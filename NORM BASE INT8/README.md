@@ -61,9 +61,7 @@ attention × V
 
 Điểm quan trọng là INT8 không thay đổi ý tưởng ranking chính:
 
-\[
-\text{norm}(Q)\times\text{norm}(K)
-\]
+||Q|| x ||K||
 
 mà thay đổi representation của Q/K để giảm chi phí và phù hợp hơn với phần cứng.
 
