@@ -67,9 +67,8 @@ Hướng này cho thấy QK block sparsity cao có thể đạt được trong t
 
 Thay vì tính toàn bộ QKᵀ rồi mới ranking, Norm Base sử dụng một proxy:
 
-\[
-P_{ij}=\|Q_i\|_F\|K_j\|_F
-\]
+<img width="318" height="111" alt="image" src="https://github.com/user-attachments/assets/0284fb96-ced7-4549-9e83-ed045c014aef" />
+
 
 Trong đó `Q_i` và `K_j` là các block 32 token.
 
@@ -107,9 +106,7 @@ Hướng này tiếp tục ý tưởng Norm Proxy nhưng đưa Q/K sang biểu d
 
 Proxy được sử dụng:
 
-\[
-P_{ij}=\|Q8_i\|_F\|K8_j\|_F
-\]
+P_{ij}=||Q8_i||F x ||K8_j||_F
 
 Sau khi ranking bằng proxy, chỉ các block được chọn mới thực hiện exact QK.
 
