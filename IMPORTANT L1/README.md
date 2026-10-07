@@ -111,13 +111,9 @@ K=10(1-0.9)=1
 
 Threshold được lấy từ **importance L1 của block cuối cùng được giữ lại**:
 
-\[
-I(B)\ge T \Rightarrow KEEP
-\]
+I(B) >= T      => KEEP
 
-\[
-I(B)<T \Rightarrow PRUNE
-\]
+I(B) < T       => PRUNE
 
 Vì vậy `T` phụ thuộc vào target sparsity và phân bố importance của các candidate blocks.
 
