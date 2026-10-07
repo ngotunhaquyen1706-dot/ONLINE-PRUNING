@@ -41,10 +41,7 @@ Ba hướng trong repository:
 Hướng đầu tiên dùng chính giá trị QK để đánh giá mức độ quan trọng của từng block.
 
 Với block `B`:
-
-\[
-I(B)=\frac{1}{N}\sum_{i,j}|B_{ij}|
-\]
+<img width="261" height="102" alt="image" src="https://github.com/user-attachments/assets/d96b490b-a59f-43eb-9dab-0504d41a18df" />
 
 Các block được xếp hạng theo `I(B)` và chỉ giữ lại Top-K block.
 
