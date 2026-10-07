@@ -22,9 +22,7 @@ N = 32 × 32 = 1024 phần tử
 
 Với một block `B`, importance được tính:
 
-\[
-I(B)=\frac{1}{N}\sum_{i,j}|B_{ij}|
-\]
+<img width="261" height="102" alt="image" src="https://github.com/user-attachments/assets/9135bb0d-bc8a-4348-b116-5d76fb41fb05" />
 
 Tức là:
 1. lấy trị tuyệt đối của các QK score hợp lệ trong block;
