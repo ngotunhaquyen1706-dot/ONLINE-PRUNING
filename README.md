@@ -1,5 +1,4 @@
-# ONLINE-PRUNING
-# ONLINE-PRUNING — QK Block Sparsity Experiments
+# ONLINE-PRUNING 
 
 Repository này tổng hợp ba hướng thử nghiệm pruning cho **QK attention** với mục tiêu cuối cùng là tìm một phương pháp pruning phù hợp với kiến trúc **systolic array 32×32**.
 
