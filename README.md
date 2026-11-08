@@ -1,6 +1,6 @@
 # ONLINE-PRUNING
 
-**Nghiên cứu loại bỏ block attention trước phép nhân $QK^T$ (Pre-QKᵀ Block Pruning) cho suy luận mô hình ngôn ngữ lớn.**
+**Nghiên cứu tập trung vào hướng loại bỏ block attention trước phép nhân $QK^T$ (Pre-QKᵀ Block Pruning) cho suy luận mô hình ngôn ngữ lớn.**
 
 Repository tập hợp các thí nghiệm **Important L1** và **Norm-based Proxy** trên Llama 7B, cùng phần khảo sát thuật toán và kiểm chứng RTL **Norm Proxy trên Qwen2.5-0.5B**. Mục tiêu lâu dài là tích hợp cơ chế lựa chọn block vào bộ tăng tốc **GEMM systolic array 32×32** trên FPGA, giúp giảm các phép tính attention không cần thiết trong giai đoạn **prefill**.
 
