@@ -1,0 +1,17 @@
+{
+  "norm": "N_Q=sum(q_int8**2) per 32-token/head block, N_K similarly",
+  "proxy": "P=N_Q*N_K in int64, exported uint64 (RTL 64-bit)",
+  "selection": "P>=T for causal valid blocks",
+  "threshold_policy": "protected_diagonal_plus_topk_optional_per_pair_threshold_input",
+  "tie_handling": "keep ALL proxy==T; actual sparsity may be lower than target",
+  "diagonal_safety": "protect diag: threshold input per pair is 0 for q_id==k_id, else T; v3 compatible",
+  "sparsities": [
+    50,
+    70,
+    80,
+    90
+  ],
+  "attention_input": "Q and repeated K after RoPE",
+  "quantization": "symmetric dynamic per-head INT8 with torch.round",
+  "note": "threshold_T is off-diagonal T. Actual 64-bit threshold per pair is in threshold_inputs_XX.hex"
+}

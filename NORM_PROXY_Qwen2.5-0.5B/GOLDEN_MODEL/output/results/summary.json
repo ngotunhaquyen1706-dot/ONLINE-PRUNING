@@ -1,0 +1,227 @@
+{
+  "0": {
+    "model": "Qwen/Qwen2.5-0.5B-Instruct-GGUF",
+    "gguf_file": "qwen2.5-0.5b-instruct-q4_k_m.gguf",
+    "level": 0,
+    "name": "dense_q4km",
+    "sample_count": 45,
+    "block_size": [
+      32,
+      32
+    ],
+    "seq_len": 2048,
+    "tasks": [
+      "narrativeqa",
+      "qasper",
+      "gov_report"
+    ],
+    "proxy_definition": "P_ij=N_Q(i)*N_K(j), N=sum(INT8**2)",
+    "threshold_policy": "protected_diagonal_plus_topk_optional_per_pair_threshold_input",
+    "stats": {
+      "target_sparsity": 0,
+      "attention_calls": 0,
+      "candidate_blocks": 0,
+      "kept_blocks": 0,
+      "pruned_blocks": 0,
+      "causal_blocks": 0,
+      "proxy_computations": 0,
+      "protected_diagonal_blocks": 0,
+      "threshold_ties": 0
+    },
+    "measured_candidate_sparsity_percent": null,
+    "per_task_scores": {
+      "narrativeqa": 1.7,
+      "qasper": 1.9,
+      "gov_report": 15.63
+    },
+    "average_score": 6.41,
+    "threshold_trace_dir": null,
+    "prediction_dir": "/content/drive/MyDrive/QWEN_NORM_PROXY_Q4KM_RUN_V4_T_RTL/predictions/dense_q4km",
+    "dataset_sources": {
+      "narrativeqa": "THUDM/LongBench",
+      "qasper": "THUDM/LongBench",
+      "gov_report": "THUDM/LongBench"
+    },
+    "elapsed_minutes_this_session": 7.6
+  },
+  "50": {
+    "model": "Qwen/Qwen2.5-0.5B-Instruct-GGUF",
+    "gguf_file": "qwen2.5-0.5b-instruct-q4_k_m.gguf",
+    "level": 50,
+    "name": "qwen_q4km_norm_50pct_32x32",
+    "sample_count": 45,
+    "block_size": [
+      32,
+      32
+    ],
+    "seq_len": 2048,
+    "tasks": [
+      "narrativeqa",
+      "qasper",
+      "gov_report"
+    ],
+    "proxy_definition": "P_ij=N_Q(i)*N_K(j), N=sum(INT8**2)",
+    "threshold_policy": "protected_diagonal_plus_topk_optional_per_pair_threshold_input",
+    "stats": {
+      "target_sparsity": 50,
+      "attention_calls": 15120,
+      "candidate_blocks": 31449600,
+      "kept_blocks": 15724810,
+      "pruned_blocks": 15724790,
+      "causal_blocks": 30481920,
+      "proxy_computations": 31449600,
+      "protected_diagonal_blocks": 967680,
+      "threshold_ties": 15141
+    },
+    "measured_candidate_sparsity_percent": 49.999968203093204,
+    "per_task_scores": {
+      "narrativeqa": 1.68,
+      "qasper": 1.37,
+      "gov_report": 11.08
+    },
+    "average_score": 4.71,
+    "threshold_trace_dir": "/content/drive/MyDrive/QWEN_NORM_PROXY_Q4KM_RUN_V4_T_RTL/threshold_traces/qwen_q4km_norm_50pct_32x32",
+    "prediction_dir": "/content/drive/MyDrive/QWEN_NORM_PROXY_Q4KM_RUN_V4_T_RTL/predictions/qwen_q4km_norm_50pct_32x32",
+    "dataset_sources": {
+      "narrativeqa": "THUDM/LongBench",
+      "qasper": "THUDM/LongBench",
+      "gov_report": "THUDM/LongBench"
+    },
+    "elapsed_minutes_this_session": 28.16
+  },
+  "70": {
+    "model": "Qwen/Qwen2.5-0.5B-Instruct-GGUF",
+    "gguf_file": "qwen2.5-0.5b-instruct-q4_k_m.gguf",
+    "level": 70,
+    "name": "qwen_q4km_norm_70pct_32x32",
+    "sample_count": 45,
+    "block_size": [
+      32,
+      32
+    ],
+    "seq_len": 2048,
+    "tasks": [
+      "narrativeqa",
+      "qasper",
+      "gov_report"
+    ],
+    "proxy_definition": "P_ij=N_Q(i)*N_K(j), N=sum(INT8**2)",
+    "threshold_policy": "protected_diagonal_plus_topk_optional_per_pair_threshold_input",
+    "stats": {
+      "target_sparsity": 70,
+      "attention_calls": 15120,
+      "candidate_blocks": 31449600,
+      "kept_blocks": 9434885,
+      "pruned_blocks": 22014715,
+      "causal_blocks": 30481920,
+      "proxy_computations": 31449600,
+      "protected_diagonal_blocks": 967680,
+      "threshold_ties": 15136
+    },
+    "measured_candidate_sparsity_percent": 69.9999841015466,
+    "per_task_scores": {
+      "narrativeqa": 1.16,
+      "qasper": 3.3,
+      "gov_report": 10.88
+    },
+    "average_score": 5.1133,
+    "threshold_trace_dir": "/content/drive/MyDrive/QWEN_NORM_PROXY_Q4KM_RUN_V4_T_RTL/threshold_traces/qwen_q4km_norm_70pct_32x32",
+    "prediction_dir": "/content/drive/MyDrive/QWEN_NORM_PROXY_Q4KM_RUN_V4_T_RTL/predictions/qwen_q4km_norm_70pct_32x32",
+    "dataset_sources": {
+      "narrativeqa": "THUDM/LongBench",
+      "qasper": "THUDM/LongBench",
+      "gov_report": "THUDM/LongBench"
+    },
+    "elapsed_minutes_this_session": 21.15
+  },
+  "80": {
+    "model": "Qwen/Qwen2.5-0.5B-Instruct-GGUF",
+    "gguf_file": "qwen2.5-0.5b-instruct-q4_k_m.gguf",
+    "level": 80,
+    "name": "qwen_q4km_norm_80pct_32x32",
+    "sample_count": 45,
+    "block_size": [
+      32,
+      32
+    ],
+    "seq_len": 2048,
+    "tasks": [
+      "narrativeqa",
+      "qasper",
+      "gov_report"
+    ],
+    "proxy_definition": "P_ij=N_Q(i)*N_K(j), N=sum(INT8**2)",
+    "threshold_policy": "protected_diagonal_plus_topk_optional_per_pair_threshold_input",
+    "stats": {
+      "target_sparsity": 80,
+      "attention_calls": 15120,
+      "candidate_blocks": 31449600,
+      "kept_blocks": 6289928,
+      "pruned_blocks": 25159672,
+      "causal_blocks": 30481920,
+      "proxy_computations": 31449600,
+      "protected_diagonal_blocks": 967680,
+      "threshold_ties": 15135
+    },
+    "measured_candidate_sparsity_percent": 79.99997456247456,
+    "per_task_scores": {
+      "narrativeqa": 1.08,
+      "qasper": 2.04,
+      "gov_report": 12.94
+    },
+    "average_score": 5.3533,
+    "threshold_trace_dir": "/content/drive/MyDrive/QWEN_NORM_PROXY_Q4KM_RUN_V4_T_RTL/threshold_traces/qwen_q4km_norm_80pct_32x32",
+    "prediction_dir": "/content/drive/MyDrive/QWEN_NORM_PROXY_Q4KM_RUN_V4_T_RTL/predictions/qwen_q4km_norm_80pct_32x32",
+    "dataset_sources": {
+      "narrativeqa": "THUDM/LongBench",
+      "qasper": "THUDM/LongBench",
+      "gov_report": "THUDM/LongBench"
+    },
+    "elapsed_minutes_this_session": 17.78
+  },
+  "90": {
+    "model": "Qwen/Qwen2.5-0.5B-Instruct-GGUF",
+    "gguf_file": "qwen2.5-0.5b-instruct-q4_k_m.gguf",
+    "level": 90,
+    "name": "qwen_q4km_norm_90pct_32x32",
+    "sample_count": 45,
+    "block_size": [
+      32,
+      32
+    ],
+    "seq_len": 2048,
+    "tasks": [
+      "narrativeqa",
+      "qasper",
+      "gov_report"
+    ],
+    "proxy_definition": "P_ij=N_Q(i)*N_K(j), N=sum(INT8**2)",
+    "threshold_policy": "protected_diagonal_plus_topk_optional_per_pair_threshold_input",
+    "stats": {
+      "target_sparsity": 90,
+      "attention_calls": 15120,
+      "candidate_blocks": 31449600,
+      "kept_blocks": 3144962,
+      "pruned_blocks": 28304638,
+      "causal_blocks": 30481920,
+      "proxy_computations": 31449600,
+      "protected_diagonal_blocks": 967680,
+      "threshold_ties": 15124
+    },
+    "measured_candidate_sparsity_percent": 89.99999364061864,
+    "per_task_scores": {
+      "narrativeqa": 0.66,
+      "qasper": 2.21,
+      "gov_report": 11.1
+    },
+    "average_score": 4.6567,
+    "threshold_trace_dir": "/content/drive/MyDrive/QWEN_NORM_PROXY_Q4KM_RUN_V4_T_RTL/threshold_traces/qwen_q4km_norm_90pct_32x32",
+    "prediction_dir": "/content/drive/MyDrive/QWEN_NORM_PROXY_Q4KM_RUN_V4_T_RTL/predictions/qwen_q4km_norm_90pct_32x32",
+    "dataset_sources": {
+      "narrativeqa": "THUDM/LongBench",
+      "qasper": "THUDM/LongBench",
+      "gov_report": "THUDM/LongBench"
+    },
+    "elapsed_minutes_this_session": 14.2
+  }
+}

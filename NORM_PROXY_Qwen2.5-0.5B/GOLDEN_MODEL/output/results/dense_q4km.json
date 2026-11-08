@@ -1,0 +1,45 @@
+{
+  "model": "Qwen/Qwen2.5-0.5B-Instruct-GGUF",
+  "gguf_file": "qwen2.5-0.5b-instruct-q4_k_m.gguf",
+  "level": 0,
+  "name": "dense_q4km",
+  "sample_count": 45,
+  "block_size": [
+    32,
+    32
+  ],
+  "seq_len": 2048,
+  "tasks": [
+    "narrativeqa",
+    "qasper",
+    "gov_report"
+  ],
+  "proxy_definition": "P_ij=N_Q(i)*N_K(j), N=sum(INT8**2)",
+  "threshold_policy": "protected_diagonal_plus_topk_optional_per_pair_threshold_input",
+  "stats": {
+    "target_sparsity": 0,
+    "attention_calls": 0,
+    "candidate_blocks": 0,
+    "kept_blocks": 0,
+    "pruned_blocks": 0,
+    "causal_blocks": 0,
+    "proxy_computations": 0,
+    "protected_diagonal_blocks": 0,
+    "threshold_ties": 0
+  },
+  "measured_candidate_sparsity_percent": null,
+  "per_task_scores": {
+    "narrativeqa": 1.7,
+    "qasper": 1.9,
+    "gov_report": 15.63
+  },
+  "average_score": 6.41,
+  "threshold_trace_dir": null,
+  "prediction_dir": "/content/drive/MyDrive/QWEN_NORM_PROXY_Q4KM_RUN_V4_T_RTL/predictions/dense_q4km",
+  "dataset_sources": {
+    "narrativeqa": "THUDM/LongBench",
+    "qasper": "THUDM/LongBench",
+    "gov_report": "THUDM/LongBench"
+  },
+  "elapsed_minutes_this_session": 7.6
+}
