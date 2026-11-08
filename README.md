@@ -1,201 +1,110 @@
-# ONLINE-PRUNING 
+# ONLINE-PRUNING
 
-Repository này tổng hợp ba hướng thử nghiệm pruning cho **QK attention** với mục tiêu cuối cùng là tìm một phương pháp pruning phù hợp với kiến trúc **systolic array 32×32**.
+**Nghiên cứu loại bỏ block attention trước phép nhân $QK^T$ (Pre-QKᵀ Block Pruning) cho suy luận mô hình ngôn ngữ lớn.**
 
-## 1. Mục tiêu chung
+Repository tập hợp các thí nghiệm **Important L1** và **Norm-based Proxy** trên Llama 7B, cùng phần khảo sát thuật toán và kiểm chứng RTL **Norm Proxy trên Qwen2.5-0.5B**. Mục tiêu lâu dài là tích hợp cơ chế lựa chọn block vào bộ tăng tốc **GEMM systolic array 32×32** trên FPGA, giúp giảm các phép tính attention không cần thiết trong giai đoạn **prefill**.
 
-Attention có dạng:
+> **Trạng thái:** Repository hiện tập trung vào thực nghiệm thuật toán, xuất dữ liệu tham chiếu và mô phỏng/kiểm chứng RTL. Việc tích hợp hoàn chỉnh với đường tính toán GEMM, chạy end-to-end trên KV260 và đo speedup thực tế là các bước triển khai/đánh giá tiếp theo, không được suy ra từ kết quả RTL PASS.
 
-```text
-Q, K
- ↓
-QKᵀ
- ↓
-chia thành các block 32×32
- ↓
-xác định block quan trọng
- ↓
-KEEP / PRUNE
- ↓
-Softmax
- ↓
-Attention × V
-```
+## 1. Bài toán nghiên cứu
 
-Ý tưởng chính là giảm số lượng block QK cần tính nhưng vẫn giữ chất lượng mô hình gần với Dense baseline.
+Trong self-attention, ma trận điểm $S=QK^T$ có số phần tử tăng theo bình phương độ dài chuỗi. Tuy nhiên, không phải mọi vùng trong ma trận attention đều quan trọng như nhau. Nếu dự đoán được những block ít quan trọng **trước khi** thực hiện $QK^T$, bộ tăng tốc có thể bỏ qua các block đó thay vì tính toàn bộ ma trận.
 
-Một điểm quan trọng là attention sử dụng **causal mask**. Vì vậy các block nằm hoàn toàn ở vùng phía trên đường chéo không chứa giá trị attention hợp lệ và không được đưa vào tập candidate để pruning.
+Hai câu hỏi chính:
 
-Ba hướng trong repository:
+1. Có thể xác định block attention **32×32** cần KEEP/PRUNE trước phép nhân $QK^T$ mà vẫn duy trì chất lượng đầu ra của LLM không?
+2. Khi triển khai trên FPGA, lợi ích từ số phép tính bị loại bỏ có lớn hơn chi phí tính proxy, lưu trữ, lập lịch và truy cập bộ nhớ không?
 
-| Hướng | Ý tưởng chính | Mục đích |
-|---|---|---|
-| **IMPORTANT L1** | Tính QKᵀ trước, sau đó dùng L1 importance của từng block | Xác định ngưỡng `T` và kiểm chứng khả năng pruning |
-| **NORM BASE** | Dùng công thức NORM để dự đoán block quan trọng trước khi tính QKᵀ | Giảm chi phí ranking và tránh tính toàn bộ QKᵀ |
-| **NORM BASE INT8** | Quantize Q/K về INT8 rồi dùng norm proxy để ranking | Đưa ý tưởng Norm Proxy gần hơn với triển khai phần cứng/edge |
+## 2. Các hướng thí nghiệm
 
----
+| Thư mục | Mô hình | Vai trò |
+| --- | --- | --- |
+| [`IMPORTANT_L1_Llama7B/`](IMPORTANT_L1_Llama7B/) | Llama 7B | Đánh giá độ quan trọng của block từ điểm attention **sau khi** tính $QK^T$; sử dụng làm mốc tham chiếu (*oracle*). |
+| [`NORM_BASE_Llama7B/`](NORM_BASE_Llama7B/) | Llama 7B | Khảo sát **Norm-based Proxy** để dự đoán block quan trọng **trước** $QK^T$. |
+| [`NORM_BASE_INT8_Llama7B/`](NORM_BASE_INT8_Llama7B/) | Llama 7B | Khảo sát Norm-based Proxy khi lượng tử hóa Q/K sang **INT8**. |
+| [`NORM_PROXY_Qwen2.5-0.5B/`](NORM_PROXY_Qwen2.5-0.5B/) | Qwen2.5-0.5B-Instruct | Chạy LongBench, khảo sát ngưỡng **T**, xuất golden data và kiểm chứng các module RTL trên Vivado. |
 
-## 2. Hướng 1 — IMPORTANT L1
+**Important L1** đánh giá block dựa trên kết quả $QK^T$, nên thích hợp làm chuẩn so sánh nhưng không tự giảm chi phí tính $QK^T$. **Norm-based Proxy** sử dụng Q/K trước GEMM nhằm đưa ra quyết định sớm hơn.
 
-Hướng đầu tiên dùng chính giá trị QK để đánh giá mức độ quan trọng của từng block.
+## 3. Ý tưởng Norm-based Proxy
 
-Với block `B`:
-<img width="261" height="102" alt="image" src="https://github.com/user-attachments/assets/d96b490b-a59f-43eb-9dab-0504d41a18df" />
+Đối với từng cặp block $(Q_i,K_j)$, phép tính tham chiếu trong nhánh Qwen INT8 là:
 
-Các block được xếp hạng theo `I(B)` và chỉ giữ lại Top-K block.
+$$
+N_{Q_i}=\sum_{x\in Q_i}x^2,\qquad
+N_{K_j}=\sum_{x\in K_j}x^2
+$$
 
-Kết quả quan trọng:
+$$
+P_{ij}=N_{Q_i}\times N_{K_j}
+$$
 
-- Block size: **32×32**
-- Sparsity được khảo sát: **50%, 70%, 80%, 90%**
-- Dataset: LongBench
-- Tasks: `narrativeqa`, `qasper`, `gov_report`
-- 15 samples/task → **45 samples/sparsity**
-- Dense baseline: **11.8900**
-- Ở 90% sparsity, measured sparsity đạt **89.9902%**
-- QK average ở 90%: **12.0667**
-- Threshold trung bình ở 90%: **12.687973**
+- **Causal mask:** Không xét những block hoàn toàn nằm ở vùng tương lai ($j>i$).
+- **Threshold $T$:** So sánh $P_{ij}$ với $T$ để quyết định **KEEP** (1) hoặc **PRUNE** (0).
+- **Lập lịch:** Các cặp KEEP được chuyển thành job $(i,j)$ để bộ tính GEMM xử lý; các cặp PRUNE được bỏ qua.
 
-Hướng này cho thấy QK block sparsity cao có thể đạt được trong tập thử nghiệm trong khi điểm trung bình vẫn gần Dense baseline.
+> Trong nhánh RTL Qwen, proxy dùng **tích hai squared norm (số nguyên)**. Đây là bình phương của tích hai Frobenius norm trong số học lý tưởng; phải dùng đúng định nghĩa/miền giá trị của $T$ khi đối chiếu dữ liệu Python và RTL. Việc lựa chọn $T$ được làm trong phần mềm/Colab; `Norm_Base_Top` hiện **nhận** `threshold_T` từ bên ngoài, không tự tìm T.
 
-> Chi tiết kết quả và cách xác định threshold được trình bày trong `IMPORTANT L1/README.md`.
+## 4. Hai nhánh đánh giá trên Qwen
 
----
+### A. Phần mềm: Colab / LongBench
 
-## 3. Hướng 2 — NORM BASE
+- Model: **Qwen2.5-0.5B-Instruct**, nguồn trọng số **GGUF Q4_K_M**, nạp vào Transformers để thực hiện thí nghiệm.
+- Lấy Q/K activation sau RoPE; lượng tử hóa Q/K thành INT8 để tính proxy.
+- So sánh **Dense** với các mức sparsity mục tiêu **50%, 70%, 80%, 90%**.
+- Tổng hợp ngưỡng $T$, sparsity thực tế, số lượng KEEP/PRUNE và điểm LongBench trên các tác vụ `narrativeqa`, `qasper`, `gov_report`.
 
-Thay vì tính toàn bộ QKᵀ rồi mới ranking, Norm Base sử dụng một proxy:
+**Câu hỏi cần trả lời:** Mức pruning nào cho phép giảm số block cần tính mà vẫn giữ chất lượng câu trả lời ở mức chấp nhận được?
 
-<img width="318" height="111" alt="image" src="https://github.com/user-attachments/assets/0284fb96-ced7-4549-9e83-ed045c014aef" />
+### B. Phần cứng: Vivado / RTL verification
 
+- Đưa Q/K INT8, block ID và ngưỡng T từ Colab vào testbench.
+- So sánh norm 32-bit, proxy 64-bit, quyết định KEEP/PRUNE và danh sách job với **golden data** của Python.
+- Kiểm tra `Norm_Engine`, `Norm_RAM`, `Causal_Block_Mask`, `Proxy_Engine`, `Threshold_Comparator`, `Block_FIFO`, `Block_Scheduler` thông qua các mức testbench khác nhau.
 
-Trong đó `Q_i` và `K_j` là các block 32 token.
+**Câu hỏi cần trả lời:** RTL có thực hiện đúng phép tính và quyết định của thuật toán Python, đồng thời lập lịch đúng cặp block hay không?
 
-Quy trình:
-
-```text
-Q, K
- ↓
-chia block 32×D
- ↓
-tính ||Q_i||F và ||K_j||F
- ↓
-Pij = ||Q_i||F × ||K_j||F
- ↓
-Top-K
- ↓
-chỉ tính exact QK cho block được chọn
-```
-
-Các norm được tính một lần và có thể được reuse cho nhiều cặp Q/K block.
-
-Điểm quan trọng:
-
-- Không dùng L1(QK)
-- Không cần tính full QKᵀ để ranking
-- Q/K block norms được vectorize
-- Exact QK chỉ được tính cho block được chọn
-- Các block được xử lý theo batch để giảm Python-loop overhead
-
----
-
-## 4. Hướng 3 — NORM BASE INT8
-
-Hướng này tiếp tục ý tưởng Norm Proxy nhưng đưa Q/K sang biểu diễn INT8.
-
-Proxy được sử dụng:
-
-P_{ij}=||Q8_i||F x ||K8_j||_F
-
-Sau khi ranking bằng proxy, chỉ các block được chọn mới thực hiện exact QK.
-
-Notebook hiện có các thí nghiệm:
-
-- Block size: **32×32**
-- Sparsity: **50%, 70%, 80%, 90%**
-- LongBench tasks:
-  - `narrativeqa`
-  - `qasper`
-  - `gov_report`
-- 5 samples/task trong các run INT8 hiện tại
-- Dense baseline được reuse: **11.8900**
-
-Các run được chia thành:
-- Experiment A: **50% / 70%**
-- Experiment B: **80% / 90%**
-
-Hướng này là bước chuyển từ ý tưởng Norm Proxy sang một pipeline phù hợp hơn với mục tiêu **INT8 + hardware acceleration**.
-
----
-
-## 5. So sánh ba hướng
-
-| Đặc điểm | IMPORTANT L1 | NORM BASE | NORM BASE INT8 |
-|---|---:|---:|---:|
-| Block | 32×32 | 32×32 | 32×32 |
-| Ranking dựa trên | QK block L1 | Q/K norms | INT8 Q/K norms |
-| Cần full QKᵀ để ranking | Có | Không | Không |
-| Exact QK | Sau ranking | Chỉ block được chọn | Chỉ block được chọn |
-| INT8 | Không | Không | Có |
-| Mục tiêu chính | Tìm threshold + baseline | Giảm chi phí ranking | Edge/hardware-oriented |
-
----
-
-## 6. Kết luận hiện tại
-
-Ba hướng thể hiện một quá trình phát triển:
-
-```text
-IMPORTANT L1
-    ↓
-xác định block importance và khả năng đạt sparsity cao
-    ↓
-NORM BASE
-    ↓
-dự đoán importance trước khi tính QKᵀ
-    ↓
-NORM BASE INT8
-    ↓
-đưa proxy sang dữ liệu INT8
-    ↓
-hướng tới triển khai trên hardware
-```
-
-Hướng **IMPORTANT L1** đóng vai trò reference/baseline về block importance.
-
-Hướng **NORM BASE** là bước quan trọng về mặt thuật toán vì loại bỏ nhu cầu tính full QKᵀ trước khi ranking.
-
-Hướng **NORM BASE INT8** tiếp tục đưa phương pháp về gần mục tiêu triển khai trên accelerator.
-
-## 7. Thư mục
+## 5. Cấu trúc repository
 
 ```text
 ONLINE-PRUNING/
-├── README.md
-│
-├── IMPORTANT L1/
-│   ├── THRESHOLD_COLAB.ipynb
-│   └── README.md
-│
-├── NORM BASE/
-│   ├── Llama7B_NORM_BASE_COLAB.ipynb
-│   └── README.md
-│
-└── NORM BASE INT8/
-    ├── Llama7B_INT8_NORM_BASE_COLAB.ipynb
-    └── README.md
+├── IMPORTANT_L1_Llama7B/
+├── NORM_BASE_Llama7B/
+├── NORM_BASE_INT8_Llama7B/
+├── NORM_PROXY_Qwen2.5-0.5B/
+│   ├── GOLDEN_MODEL/         # Notebook và đầu ra Colab (nếu đã đưa lên Git)
+│   ├── RTL/                  # Các module Norm Proxy
+│   ├── TB/                   # Testbench Vivado
+│   ├── verification/         # Script và báo cáo kiểm chứng
+│   ├── fig/                  # Hình/tài liệu minh họa
+│   ├── NORM_PROXY.srcs/      # Nguồn được Vivado quản lý
+│   ├── NORM_PROXY.xpr        # Project Vivado
+│   └── README.md             # Hướng dẫn chi tiết nhánh Qwen
+└── README.md
 ```
 
-## 8. Reproducibility
+*Nhánh Qwen có thể còn các thư mục hỗ trợ như `mem/`. Các cache và file mô phỏng do Vivado tự tạo không phải source chính. `GOLDEN_MODEL/output/` có thể chỉ được lưu ở Drive/máy cục bộ nếu dung lượng quá lớn.*
 
-Các kết quả trong repository là kết quả thực nghiệm trên Colab và LongBench với cấu hình được mô tả trong từng README.
+## 6. Bắt đầu từ đâu?
 
-Khi mở rộng thí nghiệm, cần giữ cố định:
-- model
-- block size
-- task
-- sample selection
-- evaluation pipeline
+- **Muốn hiểu các phương pháp pruning:** xem lần lượt `IMPORTANT_L1_Llama7B`, `NORM_BASE_Llama7B` và `NORM_BASE_INT8_Llama7B`.
+- **Muốn khảo sát T và chất lượng Qwen:** xem notebook trong `NORM_PROXY_Qwen2.5-0.5B/GOLDEN_MODEL/`.
+- **Muốn kiểm chứng RTL:** xem `RTL/`, `TB/`, `verification/` và dữ liệu `GOLDEN_MODEL/output/vivado_testdata/` (nếu có).
+- **Hướng dẫn chi tiết nhánh Qwen:** [NORM_PROXY_Qwen2.5-0.5B/README.md](NORM_PROXY_Qwen2.5-0.5B/README.md).
 
-để việc so sánh giữa các hướng có ý nghĩa.
+## 7. Phạm vi và cách diễn giải kết quả
+
+- **Điểm LongBench và sparsity** phản ánh chất lượng của phương pháp trên workload đã chọn; không tự suy ra tốc độ FPGA.
+- **RTL PASS** xác nhận các phép tính/handshake được kiểm thử khớp với golden data; không đồng nghĩa với hệ thống GEMM đã được tích hợp end-to-end.
+- Phần **Buffer Feeder theo block ID, cộng dồn chiều K, ghi kết quả đúng vị trí attention và đo trên KV260** cần được kiểm chứng riêng khi tích hợp.
+
+## 8. Tài liệu tham khảo
+
+- [Qwen2.5-0.5B-Instruct — Hugging Face](https://huggingface.co/Qwen/Qwen2.5-0.5B-Instruct)
+- [LongBench](https://github.com/THUDM/LongBench)
+- [GEMM_32x32_KV260 — thiết kế tăng tốc GEMM tham chiếu](https://github.com/VinhPT-Lab/GEMM_32x32_KV260)
+- [llama.cpp](https://github.com/ggml-org/llama.cpp)
+
+---
+
+**Tóm tắt:** Repository nghiên cứu cách **dự đoán sớm block attention cần tính** và chuẩn bị cho việc tích hợp cơ chế KEEP/PRUNE vào systolic array GEMM 32×32 trên FPGA.
