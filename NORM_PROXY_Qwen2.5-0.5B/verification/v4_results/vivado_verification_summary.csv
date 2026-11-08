@@ -1,0 +1,125 @@
+﻿case,source_kind,sparsity_level,threshold_T,expected_kept,expected_pruned,total_pairs,status,log,detail_csv,norm_csv,reason
+test_deterministic_64,small_deterministic,50,67313257981,2,1,3,FAIL,D:\GEMM\NORM_PROXY\verification\v4_results\test_deterministic_64_50_xsim.log,D:/GEMM/NORM_PROXY/verification/v4_results/test_deterministic_64_50_pairs.csv,,"Command exit=1 log=D:\GEMM\NORM_PROXY\verification\v4_results\test_deterministic_64_50_xsim.log
+    --f                  : Take command line options from a file
+    --file               : Take command line options from a file
+    --g                  : Run with interactive GUI
+    --gui                : Run with interactive GUI
+    --h                  : Print help message and exit
+    --help               : Print help message and exit
+    --ieeewarnings       : Enable warnings from VHDL IEEE functions
+    --ignore_assertions  : Ignore System Verilog Concurrent Assertions.
+    --ignore_coverage    : Ignore System Verilog Functional Coverage.
+    --ignore_feature     : Ignore effect of specific HDL feature or construct. Choices are: assertion
+    --log                : Specify the log file name
+    --maxdeltaid         : Specify the maximum delta number. Will report error if it exceeds maximum simulation loops at the same time
+    --maxlogsize         : Set the maximum size a log file can reach in MB. The default setting is unlimited
+    --nolog              : Suppress log file generation
+    --nosignalhandlers   : Run with no signal handlers to avoid conflict with security software.
+    --onerror            : Specify behavior upon simulation run-time error: quit|stop
+    --onfinish           : Specify behavior at end of simulation: quit|stop
+    --protoinst          : Specify a .protoinst file for protocol analysis
+    --runall             : Run simulation till end i.e. do 'run all;quit'
+    --stats              : Display memory and cpu stats upon exiting
+    --sv_seed            : seed for sv constraint random
+    --t                  : Specify the TCL file for batch mode execution
+    --tclbatch           : Specify the TCL file for batch mode execution
+    --tempDir            : Specify the temporary directory name
+    --testplusarg        : Specify plus args to be used by $test$plusargs and $value$plusargs system functions
+    --tl                 : Enable printing of file name and line number of statements being executed.
+    --tp                 : Enable printing of hierarchical names of process being executed.
+    --version            : Print the simulator version and quit.
+    --view               : Open a wave configuration file. This switch should be used together with -gui switch
+    --wdb                : Specify the waveform database output file."
+test_deterministic_64,small_deterministic,70,67313257981,2,1,3,FAIL,D:\GEMM\NORM_PROXY\verification\v4_results\test_deterministic_64_70_xsim.log,D:/GEMM/NORM_PROXY/verification/v4_results/test_deterministic_64_70_pairs.csv,,"Command exit=1 log=D:\GEMM\NORM_PROXY\verification\v4_results\test_deterministic_64_70_xsim.log
+    --f                  : Take command line options from a file
+    --file               : Take command line options from a file
+    --g                  : Run with interactive GUI
+    --gui                : Run with interactive GUI
+    --h                  : Print help message and exit
+    --help               : Print help message and exit
+    --ieeewarnings       : Enable warnings from VHDL IEEE functions
+    --ignore_assertions  : Ignore System Verilog Concurrent Assertions.
+    --ignore_coverage    : Ignore System Verilog Functional Coverage.
+    --ignore_feature     : Ignore effect of specific HDL feature or construct. Choices are: assertion
+    --log                : Specify the log file name
+    --maxdeltaid         : Specify the maximum delta number. Will report error if it exceeds maximum simulation loops at the same time
+    --maxlogsize         : Set the maximum size a log file can reach in MB. The default setting is unlimited
+    --nolog              : Suppress log file generation
+    --nosignalhandlers   : Run with no signal handlers to avoid conflict with security software.
+    --onerror            : Specify behavior upon simulation run-time error: quit|stop
+    --onfinish           : Specify behavior at end of simulation: quit|stop
+    --protoinst          : Specify a .protoinst file for protocol analysis
+    --runall             : Run simulation till end i.e. do 'run all;quit'
+    --stats              : Display memory and cpu stats upon exiting
+    --sv_seed            : seed for sv constraint random
+    --t                  : Specify the TCL file for batch mode execution
+    --tclbatch           : Specify the TCL file for batch mode execution
+    --tempDir            : Specify the temporary directory name
+    --testplusarg        : Specify plus args to be used by $test$plusargs and $value$plusargs system functions
+    --tl                 : Enable printing of file name and line number of statements being executed.
+    --tp                 : Enable printing of hierarchical names of process being executed.
+    --version            : Print the simulator version and quit.
+    --view               : Open a wave configuration file. This switch should be used together with -gui switch
+    --wdb                : Specify the waveform database output file."
+test_deterministic_64,small_deterministic,80,67313257981,2,1,3,FAIL,D:\GEMM\NORM_PROXY\verification\v4_results\test_deterministic_64_80_xsim.log,D:/GEMM/NORM_PROXY/verification/v4_results/test_deterministic_64_80_pairs.csv,,"Command exit=1 log=D:\GEMM\NORM_PROXY\verification\v4_results\test_deterministic_64_80_xsim.log
+    --f                  : Take command line options from a file
+    --file               : Take command line options from a file
+    --g                  : Run with interactive GUI
+    --gui                : Run with interactive GUI
+    --h                  : Print help message and exit
+    --help               : Print help message and exit
+    --ieeewarnings       : Enable warnings from VHDL IEEE functions
+    --ignore_assertions  : Ignore System Verilog Concurrent Assertions.
+    --ignore_coverage    : Ignore System Verilog Functional Coverage.
+    --ignore_feature     : Ignore effect of specific HDL feature or construct. Choices are: assertion
+    --log                : Specify the log file name
+    --maxdeltaid         : Specify the maximum delta number. Will report error if it exceeds maximum simulation loops at the same time
+    --maxlogsize         : Set the maximum size a log file can reach in MB. The default setting is unlimited
+    --nolog              : Suppress log file generation
+    --nosignalhandlers   : Run with no signal handlers to avoid conflict with security software.
+    --onerror            : Specify behavior upon simulation run-time error: quit|stop
+    --onfinish           : Specify behavior at end of simulation: quit|stop
+    --protoinst          : Specify a .protoinst file for protocol analysis
+    --runall             : Run simulation till end i.e. do 'run all;quit'
+    --stats              : Display memory and cpu stats upon exiting
+    --sv_seed            : seed for sv constraint random
+    --t                  : Specify the TCL file for batch mode execution
+    --tclbatch           : Specify the TCL file for batch mode execution
+    --tempDir            : Specify the temporary directory name
+    --testplusarg        : Specify plus args to be used by $test$plusargs and $value$plusargs system functions
+    --tl                 : Enable printing of file name and line number of statements being executed.
+    --tp                 : Enable printing of hierarchical names of process being executed.
+    --version            : Print the simulator version and quit.
+    --view               : Open a wave configuration file. This switch should be used together with -gui switch
+    --wdb                : Specify the waveform database output file."
+test_deterministic_64,small_deterministic,90,67313257981,2,1,3,FAIL,D:\GEMM\NORM_PROXY\verification\v4_results\test_deterministic_64_90_xsim.log,D:/GEMM/NORM_PROXY/verification/v4_results/test_deterministic_64_90_pairs.csv,,"Command exit=1 log=D:\GEMM\NORM_PROXY\verification\v4_results\test_deterministic_64_90_xsim.log
+    --f                  : Take command line options from a file
+    --file               : Take command line options from a file
+    --g                  : Run with interactive GUI
+    --gui                : Run with interactive GUI
+    --h                  : Print help message and exit
+    --help               : Print help message and exit
+    --ieeewarnings       : Enable warnings from VHDL IEEE functions
+    --ignore_assertions  : Ignore System Verilog Concurrent Assertions.
+    --ignore_coverage    : Ignore System Verilog Functional Coverage.
+    --ignore_feature     : Ignore effect of specific HDL feature or construct. Choices are: assertion
+    --log                : Specify the log file name
+    --maxdeltaid         : Specify the maximum delta number. Will report error if it exceeds maximum simulation loops at the same time
+    --maxlogsize         : Set the maximum size a log file can reach in MB. The default setting is unlimited
+    --nolog              : Suppress log file generation
+    --nosignalhandlers   : Run with no signal handlers to avoid conflict with security software.
+    --onerror            : Specify behavior upon simulation run-time error: quit|stop
+    --onfinish           : Specify behavior at end of simulation: quit|stop
+    --protoinst          : Specify a .protoinst file for protocol analysis
+    --runall             : Run simulation till end i.e. do 'run all;quit'
+    --stats              : Display memory and cpu stats upon exiting
+    --sv_seed            : seed for sv constraint random
+    --t                  : Specify the TCL file for batch mode execution
+    --tclbatch           : Specify the TCL file for batch mode execution
+    --tempDir            : Specify the temporary directory name
+    --testplusarg        : Specify plus args to be used by $test$plusargs and $value$plusargs system functions
+    --tl                 : Enable printing of file name and line number of statements being executed.
+    --tp                 : Enable printing of hierarchical names of process being executed.
+    --version            : Print the simulator version and quit.
+    --view               : Open a wave configuration file. This switch should be used together with -gui switch
+    --wdb                : Specify the waveform database output file."

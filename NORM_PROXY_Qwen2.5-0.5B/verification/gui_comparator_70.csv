@@ -1,0 +1,5 @@
+pair_idx,level,q_id,k_id,proxy_hex,threshold_hex,keep,status
+0,70,0,0,0000000fac5a5daa,0000000000000000,1,PASS
+1,70,1,0,0000000fac2ecdfc,0000000fac2ecdfd,0,PASS
+2,70,1,1,0000000fabc7e820,0000000000000000,1,PASS
+SUMMARY,70,,,,,,RTL_PASS

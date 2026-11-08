@@ -1,0 +1,5 @@
+pair_idx,level,q_id,k_id,q_norm_hex,k_norm_hex,proxy_hex,threshold_hex,keep,cycle,status
+0,50,0,0,0003f531,0003f5ca,0000000fac5a5daa,0000000000000000,1,283,PASS
+1,50,1,0,0003f526,0003f5ca,0000000fac2ecdfc,0000000fac2ecdfd,0,289,PASS
+2,50,1,1,0003f526,0003f5b0,0000000fabc7e820,0000000000000000,1,294,PASS
+SUMMARY,50,,,,,,,kept=2,cycles=301,RTL_PASS

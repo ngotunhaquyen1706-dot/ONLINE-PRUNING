@@ -1,0 +1,28 @@
+
+# Vivado generated files
+**/.Xil/
+**/xsim.dir/
+**/NORM_PROXY.cache/
+**/NORM_PROXY.sim/
+**/NORM_PROXY.hw/
+**/NORM_PROXY.ip_user_files/
+**/*.runs/
+**/*.gen/
+
+# Simulation outputs
+*.log
+*.jou
+*.wdb
+*.vcd
+*.pb
+
+# Model weights and temporary files
+*.gguf
+*.safetensors
+**/hf_cache/
+**/__pycache__/
+**/.ipynb_checkpoints/
+
+# Archives
+*.zip
+

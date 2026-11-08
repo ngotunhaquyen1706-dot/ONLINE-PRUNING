@@ -1,0 +1,5 @@
+kind,block_id,expected_norm_hex,rtl_norm_hex,status
+Q,0,0003f531,0003f531,PASS
+Q,1,0003f526,0003f526,PASS
+K,0,0003f5ca,0003f5ca,PASS
+K,1,0003f5b0,0003f5b0,PASS
